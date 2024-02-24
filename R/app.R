@@ -164,7 +164,7 @@ tabPanel("Instructions",
                                p("For a complete description on how to harmonize data, please see the ", 
                                  a(href="https://unfpasae.github.io/SAE_Manual/01-Harmonization.html", "Harmonization Guide", target="_blank"), 
                                  "in the SAE manual. You can also download a sample of formatted data from the ", 
-                                 a(href="https://github.com/unfpasae/SAEpackage/tree/main/R/data/Nepal/tables", "Github site.", target="_blank"), 
+                                 a(href="https://github.com/tomasbird/shinyapps_SAE/tree/main/R/data/Nepal", "Github site.", target="_blank"), 
                                  ),
                                hr(),
                                h4("Using pre-loaded data"),
@@ -183,7 +183,9 @@ tabPanel("Instructions",
                                fluidRow(
                                  column(8, 
                                         p("If you have your own data formatted as described above, you can load them using the 
-                                 load data dialogue. Note that you must do this for both census and survey datasets.")
+                                 load data dialogue. Note that you must do this for both census and survey datasets. Examples of harmonized 
+                                          tabular data are avalable on the ", 
+                                          a(href="https://github.com/tomasbird/shinyapps_SAE/tree/main/R/data/Nepal", "Github site.", target="_blank"))
                                  ),
                                  column(4, 
                                         img(src="tab1_upload.png", width="80%")
@@ -195,7 +197,7 @@ tabPanel("Instructions",
                                  column(8, 
                                         p("If you wish to view maps for the raw data and results, you will need to upload shapefiles.  These should be in
                                         .shp format and include all necessary metadata files. Sample shapefiles are available at the ",  
-                                        a(href="https://github.com/unfpasae/SAEpackage/tree/main/R/data/Nepal/shapefiles", "Github site.", target="_blank"))
+                                        a(href="https://github.com/tomasbird/shinyapps_SAE/tree/main/R/data/Nepal/Survey/shp", "Github site.", target="_blank"))
                                  ),
                                  column(4, 
                                         img(src="tab1_spatial_up.png", width="80%")
@@ -432,12 +434,21 @@ tabPanel("Instructions",
               
               
               conditionalPanel('input.datatoload === "Survey"',
-                  p("Template data from Nepal are available, and can be downloaded from the Github site, including ",
-                a(href="https://github.com/unfpasae/SAEpackage/tree/main/R/data/Nepal/tables", "NPL_DHS_harmonized.csv", target="_blank"), 
-                " and ", 
-                a(href="https://github.com/unfpasae/SAEpackage/tree/main/R/data/Nepal/tables", "Github site.", target="_blank"))), 
-            
-              p("Example data are available for use in learning how to use the app."),
+                  p("Template survey data from Nepal are available, and can be downloaded from the Github site, including tabular data",
+                a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Survey/NPL_DHS_harmonized.csv", 
+                  "(NPL_DHS_harmonized.csv)", target="_blank"), 
+                " and shapefiles", 
+                a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Survey/shp", "(NPL_DHS_Regions.shp).", 
+                  target="_blank"))), 
+              conditionalPanel('input.datatoload === "Census"',
+                               p("Template census data from Nepal are available, and can be downloaded from the Github site, including tabular data",
+                                 a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Census/NPL_census_harmonized.csv", 
+                                   "(NPL_DHS_harmonized.csv)", target="_blank"), 
+                                 " and shapefiles", 
+                                 a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Census/shp", "(NPL_census_districts.shp).", 
+                                   target="_blank"))), 
+               
+              p("Example data from Nepal are pre-loaded for learning how to use the app."),
               checkboxInput("usedemo", label = "Check to use Nepal data", value = FALSE),
               
              
