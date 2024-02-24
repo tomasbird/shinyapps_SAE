@@ -1,0 +1,19 @@
+Package: SAEApp
+Title: An R Application for Conducting Small Area Estimation
+Version: 0.0.0.9000
+Authors@R: 
+    person("Tomas", "Bird", , "tomasbird@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Application for running small area estimation.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Depends: 
+    R (>= 2.10)
+LazyData: true
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

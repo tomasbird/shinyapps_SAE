@@ -1,0 +1,12 @@
+name: SAE_package
+title: SAE_package
+username: unfpa-sae
+account: unfpa-sae
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10187801
+bundleId: 8266810
+url: https://unfpa-sae.shinyapps.io/SAE_package/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
