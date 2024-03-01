@@ -8,10 +8,10 @@ set.seed(1234)
 #### Check Aliasing
 # Button to run AliasTest
 Aliastest <- eventReactive(input$checkalias, {
-  shiny::validate(
-    need(sum(1-(input$Predictors %in% names(surveyDF())))==0, "Predictor missing in survey data.  
-         Check whether unnecessary census spatial variables have been excluded." )
-  )
+  #shiny::validate(
+  #  need(sum(1-(input$Predictors %in% names(surveyDF())))==0, "Predictor missing in survey data.  
+  #       Check whether unnecessary census spatial variables have been excluded." )
+  #)
   
   alias(formula(paste(input$indicator, "~" , 
                       paste0(input$model_params, collapse=" + "))), data=surveyDF())
@@ -28,7 +28,10 @@ Aliasout=reactive({
 })
 
 output$Aliasreport <- renderPrint({
- Aliasout()
+  shiny::validate(
+    need(Aliasout(), "Please run Alias test")
+     )
+  Aliasout()
   })
 
 
@@ -36,9 +39,9 @@ output$Aliasreport <- renderPrint({
 ## VIF test on all variables
 VIFtest <- eventReactive(input$checkvif, {
 
-  shiny::validate(
-    need(Aliasout()=="No aliasing detected", "Cannot run Variance Inflation Test with Aliased variables")
-  )
+  #shiny::validate(
+  #  need(Aliasout()=="No aliasing detected", "Cannot run Variance Inflation Test with Aliased variables")
+  #)
   fullform=formula(paste(input$indicator, "~" , 
                          paste0(input$model_params, collapse=" + ")))
  mod=glm(fullform, data=surveyDF(), family="binomial")

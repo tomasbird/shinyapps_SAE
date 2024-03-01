@@ -5,7 +5,7 @@ mergeshpfn=function(shp,df, select.spatial){ #select.vars,
   
   shp=shp %>% st_as_sf
   
-  freqdat=subset(df, select=c( select.spatial)) %>% #select.vars,
+  freqdat=subset(df, select=c(select.spatial)) %>% #select.vars,
     as.data.frame() %>%
     group_by_at(select.spatial) %>%
     summarize(n=n()) %>%

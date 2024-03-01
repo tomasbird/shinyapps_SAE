@@ -29,12 +29,19 @@ library(ggpubr)
 source("loaddata_fn.R",local=TRUE)
 
 ui <- fluidPage(theme='bootstrap.css',
-
+      tags$style(type = 'text/css', '.navbar { background-color: #262626;
+                                               font-family: Arial Black;
+                                               font-size: 15px;
+                                               color: #FF0000; }',
+                           '.navbar-dropdown { background-color: #262626;
+                                                    font-family: Arial;
+                                                    font-size: 15px;
+                                                    color: #FF0000; }'),
       # Define UI for application that draws a histogram
     navbarPage(
-      id="tabs",
+      id="tabs", inverse=T,
       windowTitle = "SAE Tool",
-      title="", 
+      title="",
       header=headerPanel(div(style = "width: 100%", img(src="mini-SAE-Logo.png", height="10%", width="10%"), "SAE Tool")), 
     
 ## Landing Page ## 
@@ -422,38 +429,34 @@ tabPanel("Instructions",
 ## Data load ##
       tabPanel("Load Data",
           h3("Load Data"),
-          p("In this tab, prepare data for analysis  using a dataset from Nepal, 
-          or load your own formatted dataset."),  
+         # p("In this tab, prepare data for analysis  using a dataset from Nepal, 
+         # or load your own formatted dataset."),  
              
                                  
           sidebarLayout(
             sidebarPanel(
-              p("Upload your own tabular (.csv) and shapefile data for both census and survey."),
+             # p("Upload Census and Survey data."),
               surveyloadPanel,
               censusloadPanel,
               
-              
               conditionalPanel('input.datatoload === "Survey"',
-                  p("Template survey data from Nepal are available, and can be downloaded from the Github site, including tabular data",
-                a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Survey/NPL_DHS_harmonized.csv", 
+                  p("Template data",
+                  a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Survey/NPL_DHS_harmonized.csv", 
                   "(NPL_DHS_harmonized.csv)", target="_blank"), 
-                " and shapefiles", 
-                a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Survey/shp", "(NPL_DHS_Regions.shp).", 
-                  target="_blank"))), 
+                  " and shapefiles", 
+                  a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Survey/shp", "(NPL_DHS_Regions.shp).", 
+                  target="_blank"), "from Nepal are available to download.")), 
               conditionalPanel('input.datatoload === "Census"',
-                               p("Template census data from Nepal are available, and can be downloaded from the Github site, including tabular data",
-                                 a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Census/NPL_census_harmonized.csv", 
-                                   "(NPL_DHS_harmonized.csv)", target="_blank"), 
-                                 " and shapefiles", 
-                                 a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Census/shp", "(NPL_census_districts.shp).", 
-                                   target="_blank"))), 
-               
-              p("Example data from Nepal are pre-loaded for learning how to use the app."),
+                   p("Template data",
+                   a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Census/NPL_census_harmonized.csv", 
+                   "(NPL_DHS_harmonized.csv)", target="_blank"), 
+                   " and shapefiles", 
+                   a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Census/shp", "(NPL_census_districts.shp).", 
+                    target="_blank"), "from Nepal are available to download.")), 
+               hr(),
+              p("Data from Nepal can be loaded for demonstrating the app."),
               checkboxInput("usedemo", label = "Check to use Nepal data", value = FALSE),
               
-             
-              #conditionalPanel('input.usedemo == 0',
-              #  ),
                 
            # Choose indicator and spatial data
               conditionalPanel('input.datatoload === "Survey"',
@@ -498,11 +501,11 @@ tabPanel("Instructions",
                  )))), # end Select Data
 
 ## Comparing Data ##        
-    tabPanel('Inspect Predictors', 
+    tabPanel('Predictors', 
          h3("Inspect Predictors"),
-         p("Because the model predictions are based on linear regression, it is important that the variables 
-           are correlated with the indicator of interest, that the predictor variables are similarly distributed in 
-           census and survey data and that the census and survey data have similar distribution of effort in space."),
+         p("Because the model is based on regression, predictor variables 
+           must be correlated with the indicator. Also, the predictor variables should be similarly distributed in 
+           census and survey data and both census and survey data should have similar distribution of effort in space."),
          conditionalPanel('input.comparison=="Correlations"',
             p("Observe which predictors vary strongly correlated with your chosen indicator. Generally variables that have
             correlation values above 0.5 are should be included. Others may be included if desired.")),
@@ -522,10 +525,12 @@ tabPanel("Instructions",
                 conditionalPanel(condition="$('html').hasClass('shiny-busy')",
                   tags$div("Loading correlations...",id="loadmessage")),
                 fluidRow(plotOutput("VarsR2plot") %>% withSpinner(color="#0dc5c1")),
-                  downloadButton("VarsR2plot_down", "Download comparisons")
-                     ),
+                p(paste0("Figure 1: Correlation plot showing the strength of the relationship between the chosen indicators and each of the chosen predictor variables.")),  
+                
+                downloadButton("VarsR2plot_down", "Download comparisons")
+                ),
                      
-                     tabPanel("Distributions", 
+          tabPanel("Distributions", 
                               conditionalPanel(condition="$('html').hasClass('shiny-busy')",
                                                tags$div("Loading plots",id="loadmessage")),
                               uiOutput("show_survey_vars"),
@@ -534,11 +539,12 @@ tabPanel("Instructions",
                                 column(6, plotOutput("compare_vars_scatterplot"))),
                               fluidRow(
                                 column(6, p(paste0("Figure 2: Histogram showing how frequently categories 
-                                                   in each variable occur in Survey and census data."))),
+                                                   in each variable occur in Survey and census data. Frequencies are calculated as
+                                                    the number of respondents in each category divided by the total number of responses."))),
                                 column(6, p(paste0("Figure 3: Scatterplots comparing the relative frequencies 
                                                     of individual categories for each variable in census versus survey data.
                                                     The R2 value in each plot shows the strength of the corelation between the two 
-                                                    datasets.")))),
+                                                    datasets. Each point shows the frequency observed for each category for each reagion. ")))),
                               fluidRow(
                                 column(6,downloadButton("compare_vars_barplot_down", "Download Barplot")),
                                 column(6,downloadButton("compare_vars_scatterplot_down", "Download Scatterplot"))
@@ -549,8 +555,12 @@ tabPanel("Instructions",
                                 h3("Frequency of observations by survey area")),
                               conditionalPanel(condition="$('html').hasClass('shiny-busy')",
                                                tags$div("Loading maps...",id="loadmessage")),
-                              fluidRow(plotOutput("survey_freq_plot")), 
-                              fluidRow(plotOutput("census_freq_plot"))
+                              fluidRow(plotOutput("survey_freq_plot")),
+                              p("Figure 4: Spatial distribution of DHS sampling effort. Frequency is calculated
+                                as the number of surveys conducted in each DHS region divided by the total number of surveys."),
+                              fluidRow(plotOutput("census_freq_plot")),
+                              p("Figure 5: Spatial distribution of sampling effort during census. Frequency is calculated
+                                as the number of surveys conducted in each DHS region divided by the total number of surveys."),
                      ))), # end Compare data
               
 
@@ -561,12 +571,13 @@ tabPanel("Instructions",
              h3("Model Setup"),
              conditionalPanel('input.modelbuild=="Parameter Tests"',
                               h4("Aliasing"),
-                              p("Aliasing refers to when two variables are perfectly correlated. "),
+                              p("Aliasing refers to when two variables are perfectly correlated. You must remove Aliased 
+                                variables before running the VIF test."),
                               actionButton("checkalias", "Check for Aliasing"),             
                               hr(),
                               br(),
                               h4("Collinearity"),
-                              p("Collinearity occurs when two variables are closely correlated."),
+                             
                               actionButton("checkvif", "Variance Inflation Factors"),
                               br()
              ),
@@ -592,13 +603,21 @@ tabPanel("Instructions",
            mainPanel(
              tabsetPanel(id = 'modelbuild',
                          tabPanel("Parameter Tests", 
-                                  p("You must test for Aliasing and Multicollinearity to determine which variables should be excluded."),
+                                  p("Before building the model, check to make sure all the predictors 
+                                  are independent. 
+                                  The collinearity test calculates a Variance Inflation Factor (VIF) for each variable 
+                                  that helps determine whether that variable is highly correlated with one of the other 
+                                  variables. However it cannot be calculated for perfectly correlated variables. You must 
+                                  therefore test for Aliasing first."),
                                   hr(),
                                   h3("Alias Report"),
-                                  #p("Aliasing exists when two variables are perfectly correlated."),
-                                  fluidRow(
-                                    textOutput("Aliasreport")),
-                                  br(),
+                                 
+                                  p("You must confirm there is no Aliasing by removing any variables flagged in the report 
+                                    and re-running the test."),
+                                  conditionalPanel('input.checkalias==FALSE', p("Alias test not yet run.")),
+                                  conditionalPanel('input.checkalias==TRUE',  textOutput("Aliasreport")),
+                                 
+                                  
                                   hr(),
                                   h3("Variance Inflation Table"),
                                   p("The VIF table shows  Generalized Variance Inflation Factor (GVIF) and degrees of freedom (df) 
@@ -628,7 +647,7 @@ tabPanel("Instructions",
                          ))))), # End Model Setup
 
 ##  Assessing up Model ##
-    tabPanel('Model Assessment', 
+    tabPanel('Assessment', 
          tabsetPanel(id = 'validation',
                      tabPanel("Assess", h3("Model Assessment"),
                               fluidRow(
@@ -742,9 +761,10 @@ tabPanel('Prediction',
 ) # end ui
 
 
+#options(shiny.maxRequestSize=80*1024^2)
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-    
+  
     ## Objects for Landing Page
     observeEvent(input$gotoIntro, {
       updateTabsetPanel(session = session, inputId = "tabs", selected = "Instructions")
