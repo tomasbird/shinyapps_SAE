@@ -63,50 +63,49 @@ ui <- fluidPage(theme='bootstrap.css',
            
            fluidRow(align="center",
              column(4),
-             column(4, actionButton(inputId = "gotoIntro", label="Click here to start",   style="height:50px; width:170px; font-size:120%"), 
+             column(4, actionButton(inputId = "gotoIntro", label="Click here to start",   
+                                    style="height:50px; width:170px; font-size:120%") 
                     ),
              column(4)),
            
            hr(),
+           
+           
+           #buttons
            fluidRow(align="center",
-              column(4, 
-                     h4("SAE for Family planning "),
-                     p("For detailed information on the UNFPA SAE theory, method and the Nepal use case.")),
-              column(4, 
-                     h4("SAE training and videos"),
-                     p("For training materials and videos showing how to use the app.")),
-              column(4, 
-                     h4("Offline Tool"),
-                     p("If you have limited bandwidth, it is possible to download the tool from github and use it on your own computer.")),
+                    column(4,
+                           actionButton("theory", "SAE Theory", icon("chart-line", style='padding:4px; font-size:80%'), 
+                                        onclick ="window.open('https://drive.google.com/file/d/1SKodX4STs6Rc1DLq3aKuifw4eR48xsTn/view', '_blank')", 
+                                        style="height:50px; width:170px; font-size:120%")),
+                    column(4,
+                           actionButton("manual", "SAE Training", icon("graduation-cap", style='padding:4px; font-size:80%'), 
+                                        onclick ="window.open('https://unfpasae.github.io/SAE_Manual/', '_blank')", 
+                                        style="height:50px; width:170px;font-size:120%")),
+                    column(4,
+                           actionButton("download", "Offline Tool", icon("github", style='padding:4px; font-size:80%'), 
+                                        onclick ="window.open('https://github.com/unfpasae/SAEpackage/', '_blank')", 
+                                        style="height:50px; width:170px; font-size:120%"))
            ),
-           
-           
-           ### Pictures
+           fluidRow(align="center",
+               column(4, 
+                      p("Detailed information on the UNFPA SAE theory, method and the Nepal use case.")),
+               column(4, 
+                      p("Training materials and videos showing how to use the app.")),
+               column(4, 
+                      p("Download the tool from github and use it on your own computer."))
+            ),           ### Pictures
            fluidRow(align="center",
                     column(4,
-                           img(src="tab1_FPguidance.png", width="90%")),
+                           img(src="tab1_FPguidance2.png", width="99%")),
                     column(4,
-                           img(src="tab1_coursecover.png", width="90%")),
+                           img(src="tab1_coursecover.png", width="99%")),
                     column(4,
-                           img(src="tab1_github.png", width="90%")),
+                           img(src="tab1_github.png", width="99%"))
            ),
            
            
            ### link buttons
-           fluidRow(align="center",
-              column(4,
-                     actionButton("theory", "SAE Theory", icon("chart-line", style='padding:4px; font-size:80%'), 
-                                  onclick ="window.open('https://drive.google.com/file/d/1SKodX4STs6Rc1DLq3aKuifw4eR48xsTn/view', '_blank')", 
-                                  style="height:50px; width:170px; font-size:120%")),
-              column(4,
-                     actionButton("manual", "SAE Training", icon("graduation-cap", style='padding:4px; font-size:80%'), 
-                                  onclick ="window.open('https://unfpasae.github.io/SAE_Manual/', '_blank')", 
-                                  style="height:50px; width:170px;font-size:120%")),
-              column(4,
-                     actionButton("download", "Offline Tool", icon("github", style='padding:4px; font-size:80%'), 
-                                  onclick ="window.open('https://github.com/unfpasae/SAEpackage/', '_blank')", 
-                                  style="height:50px; width:170px; font-size:120%")),
-           ),
+          
           
            br(),
            br(),
@@ -158,7 +157,7 @@ tabPanel("Instructions",
                                         br(),
                                         img(src="tab1_error2.png", width="90%")
                                  )),
-                               hr(),
+                               hr()
                               
                       ),
                       tabPanel("Step 1: Load data",
@@ -171,7 +170,7 @@ tabPanel("Instructions",
                                p("For a complete description on how to harmonize data, please see the ", 
                                  a(href="https://unfpasae.github.io/SAE_Manual/01-Harmonization.html", "Harmonization Guide", target="_blank"), 
                                  "in the SAE manual. You can also download a sample of formatted data from the ", 
-                                 a(href="https://github.com/tomasbird/shinyapps_SAE/tree/main/R/data/Nepal", "Github site.", target="_blank"), 
+                                 a(href="https://github.com/tomasbird/shinyapps_SAE/tree/main/R/data/Nepal", "Github site.", target="_blank") 
                                  ),
                                hr(),
                                h4("Using pre-loaded data"),
@@ -399,7 +398,7 @@ tabPanel("Instructions",
                                  column(4,
                                         img(src="tab4_xval.png", width="80%")
                                  )),
-                               hr(),
+                               hr()
                                ),
                       tabPanel("Step 5: Prediction",
                                h3("Prediction"),
@@ -422,16 +421,13 @@ tabPanel("Instructions",
                                         p("Predictions are also produced as tabular data. These can be downloaded as .csv files.")),
                                  column(6,
                                         img(src="tab5_predtable.png", width="80%"))
-                               ),
+                               )
                                )
          )), # end Instructions
       
 ## Data load ##
       tabPanel("Load Data",
           h3("Load Data"),
-         # p("In this tab, prepare data for analysis  using a dataset from Nepal, 
-         # or load your own formatted dataset."),  
-             
                                  
           sidebarLayout(
             sidebarPanel(
@@ -445,26 +441,29 @@ tabPanel("Instructions",
                   "(NPL_DHS_harmonized.csv)", target="_blank"), 
                   " and shapefiles", 
                   a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Survey/shp", "(NPL_DHS_Regions.shp).", 
-                  target="_blank"), "from Nepal are available to download.")), 
+                  target="_blank"), "from Nepal are available to download.")
+                  ), 
               conditionalPanel('input.datatoload === "Census"',
                    p("Template data",
                    a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Census/NPL_census_harmonized.csv", 
                    "(NPL_DHS_harmonized.csv)", target="_blank"), 
                    " and shapefiles", 
                    a(href="https://github.com/tomasbird/shinyapps_SAE/blob/main/R/data/Nepal/Census/shp", "(NPL_census_districts.shp).", 
-                    target="_blank"), "from Nepal are available to download.")), 
-               hr(),
-              p("Data from Nepal can be loaded for demonstrating the app."),
+                    target="_blank"), "from Nepal are available to download, or can be loaded for demonstrating the app.")
+                   ),
+              
               checkboxInput("usedemo", label = "Check to use Nepal data", value = FALSE),
               
                 
            # Choose indicator and spatial data
               conditionalPanel('input.datatoload === "Survey"',
-                p("Choose the response variable below."),
-                uiOutput("choose_survey_indicator"),
+                
+                conditionalPanel('input.datatoload === "Survey"',
+                  p("Choose the response variable below."),
+                  uiOutput("choose_survey_indicator"),
                            
-                p("Choose the DHS spatial area names"),
-                uiOutput("choose_survey_spatial")
+                  p("Choose the DHS spatial area names"),
+                  uiOutput("choose_survey_spatial"))
                 ),
                
               conditionalPanel('input.datatoload === "Census"',
@@ -481,19 +480,19 @@ tabPanel("Instructions",
           mainPanel(
             tabsetPanel(id='datatoload',
                 tabPanel("Survey", 
-                    conditionalPanel(condition="$('html').hasClass('shiny-busy')",
-                      tags$div("Loading survey data...",id="loadmessage")
-                      ),
+                    #conditionalPanel(condition="$('html').hasClass('shiny-busy')",
+                      #tags$div("Loading survey data...",id="loadmessage")
+                      #),
                          
-                    fluidRow(plotOutput("surveyMap")),
-                    fluidRow(DT::dataTableOutput("survey_preview")),
+                    fluidRow(plotOutput("surveyMap") %>% withSpinner(color="#0dc5c1")),
+                    fluidRow(DT::dataTableOutput("survey_preview") %>% withSpinner(color="#0dc5c1")),
                     fluidRow(verbatimTextOutput("pathprint"))
                     ),
                 
                 tabPanel("Census", 
-                    conditionalPanel(condition="$('html').hasClass('shiny-busy')",
-                      tags$div("Loading census data...",id="loadmessage")
-                      ),
+                    #conditionalPanel(condition="$('html').hasClass('shiny-busy')",
+                    #  tags$div("Loading census data...",id="loadmessage")
+                     # ),
                          
                     fluidRow(plotOutput("censusMap") %>% withSpinner(color="#0dc5c1")),
                     fluidRow(DT::dataTableOutput("census_preview") %>% withSpinner(color="#0dc5c1"))
@@ -560,7 +559,7 @@ tabPanel("Instructions",
                                 as the number of surveys conducted in each DHS region divided by the total number of surveys."),
                               fluidRow(plotOutput("census_freq_plot")),
                               p("Figure 5: Spatial distribution of sampling effort during census. Frequency is calculated
-                                as the number of surveys conducted in each DHS region divided by the total number of surveys."),
+                                as the number of surveys conducted in each DHS region divided by the total number of surveys.")
                      ))), # end Compare data
               
 
@@ -573,7 +572,7 @@ tabPanel("Instructions",
                               h4("Aliasing"),
                               p("Aliasing refers to when two variables are perfectly correlated. You must remove Aliased 
                                 variables before running the VIF test."),
-                              actionButton("checkalias", "Check for Aliasing"),             
+                             # actionButton("checkalias", "Check for Aliasing"),             
                               hr(),
                               br(),
                               h4("Collinearity"),
@@ -588,11 +587,7 @@ tabPanel("Instructions",
                               br(),
                               actionButton("runstepwise", "Stepwise variable selection", icon=icon("shoe-prints")),             
                               
-                                #uiOutput("include_rfx"),
-                              
-                                #uiOutput("include_ffx"),
-                              
-                                uiOutput("regionfx")
+                              uiOutput("regionfx")
              ),
              
              h4("Included Variables"),
@@ -608,23 +603,21 @@ tabPanel("Instructions",
                                   The collinearity test calculates a Variance Inflation Factor (VIF) for each variable 
                                   that helps determine whether that variable is highly correlated with one of the other 
                                   variables. However it cannot be calculated for perfectly correlated variables. You must 
-                                  therefore test for Aliasing first."),
+                                  therefore test for Aliasing first and confirm that no Aliasing is detected in the data."),
                                   hr(),
                                   h3("Alias Report"),
-                                 
+                                  textOutput("Aliasreport"),
                                   p("You must confirm there is no Aliasing by removing any variables flagged in the report 
                                     and re-running the test."),
-                                  conditionalPanel('input.checkalias==FALSE', p("Alias test not yet run.")),
-                                  conditionalPanel('input.checkalias==TRUE',  textOutput("Aliasreport")),
                                  
                                   
                                   hr(),
                                   h3("Variance Inflation Table"),
-                                  p("The VIF table shows  Generalized Variance Inflation Factor (GVIF) and degrees of freedom (df) 
+                                  p("The GVIF table shows  Generalized Variance Inflation Factor (GVIF) and degrees of freedom (df) 
                                   for each variable. Variables with GVIF score of greater than 2 should be excluded."),
                                   fluidRow(DT::dataTableOutput("VIFtable")),
                                   br(),
-                                  fluidRow(downloadButton("vif_down", "Download VIF table")),
+                                  fluidRow(downloadButton("vif_down", "Download GVIF table")),
                                   hr()
                          ),
                          
@@ -761,7 +754,7 @@ tabPanel('Prediction',
 ) # end ui
 
 
-#options(shiny.maxRequestSize=80*1024^2)
+options(shiny.maxRequestSize=80*1024^2)
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   

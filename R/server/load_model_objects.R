@@ -7,12 +7,12 @@ set.seed(1234)
 
 #### Check Aliasing
 # Button to run AliasTest
-Aliastest <- eventReactive(input$checkalias, {
+#Aliastest <- eventReactive(input$checkalias, {
   #shiny::validate(
   #  need(sum(1-(input$Predictors %in% names(surveyDF())))==0, "Predictor missing in survey data.  
   #       Check whether unnecessary census spatial variables have been excluded." )
   #)
-  
+Aliastest <- reactive({
   alias(formula(paste(input$indicator, "~" , 
                       paste0(input$model_params, collapse=" + "))), data=surveyDF())
 })
@@ -107,21 +107,13 @@ output$choose_model_params <- renderUI({
 })
 
 
-# UI for Random Effects
-#output$include_rfx=renderUI({
-#  checkboxInput("rfx_yes_no", "Include a Regional random effect", value=FALSE)
-#})
-
-#output$include_ffx=renderUI({
-#  checkboxInput("ffx_yes_no", "Include a Regional fixed effect", value=FALSE)
-#})
 
 output$regionfx=renderUI({
   awesomeRadio(
     inputId = "regionfx",
     label = "What kind of effect should survey regions be treated as?", 
     choices = c("None", "Fixed", "Random"),
-    selected = "None",
+    selected = "Fixed",
     status = "warning"
     )
 })
