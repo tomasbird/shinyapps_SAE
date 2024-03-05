@@ -48,9 +48,12 @@ ui <- fluidPage(theme='bootstrap.css',
       tabPanel("",
            title="Home",
            h3("Getting Started with SAE"),
-           p("Small area estimation techniques span a large array of statistical methods. The UNFPA method used in 
-             this tool is aimed proviing a robust approach that can be implemented in any setting where both census and 
+           p("Small area estimation (SAE) techniques span a large array of statistical methods. The UNFPA method used in 
+             this tool provides a robust approach that can be implemented in any country where both census and 
              survey data are available."),
+           p("SAE requires many steps including selecting and comparing variables, building models, evaluating the model 
+             outputs and creating predictions.  These steps are usually done in a statistical package. This tool makes 
+             these steps more accessible to a broader audience."),
           
            h4("Approach"),
            p("Population demographic data found in international household surveys often use binary 
@@ -177,7 +180,7 @@ tabPanel("Instructions",
                                fluidRow(
                                  column(8, 
                                         p("To get an understanding of how the tool works, pre-loaded numerical and spatialdata from Nepal are available. 
-                                      Simply check the box and these data will be loaded into the tool. These data are helpful for understanding the analysis
+                                      Check the box and these data will be loaded into the tool. These data are helpful for understanding the analysis
                                           flow and the stucture of data needed.")
                                  ),
                                  column(4, 
@@ -213,8 +216,10 @@ tabPanel("Instructions",
                                h4("Survey Data Indicator"),
                                fluidRow(
                                  column(8, 
-                                        p("Once the survey data are loaded, you must identify the  indicator in the dataset.  In this case we have chosen CPR. 
-                                          You must also select the column name that indicates the survey region in the dataset. In this case, it is REGNAME.")
+                                        p("Once the survey data are loaded, you must identify the  indicator in the dataset.  In this case we have chosen Contraceptive 
+                                        Prevalence Rate - abbreviated as CPR. 
+                                          You must also select the column name that indicates the survey region in the dataset. 
+                                          In this case, it is REGNAME, which is the default for DHS survey areas.")
                                  ),
                                  column(4, 
                                         img(src="tab1_indicators.png", width="80%")
@@ -470,7 +475,7 @@ tabPanel("Instructions",
                 p("Choose the column in the census data representing census spatial areas."),
                
                 uiOutput("choose_census_spatial") %>% withSpinner(color="#0dc5c1"),
-                p("Choose variables to be used as predictors. Please exclude any variables (such as spatial data) 
+                p("Choose variables to be used as predictors. Please exclude any variables (such as spatial data or weights) 
                     that won't be used in the model"),
                
                 uiOutput("choose_census_vars") %>% withSpinner(color="#0dc5c1"))
