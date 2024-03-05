@@ -759,7 +759,7 @@ tabPanel('Prediction',
 ) # end ui
 
 
-options(shiny.maxRequestSize=80*1024^2)
+options(shiny.maxRequestSize=500*1024^2)
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   
