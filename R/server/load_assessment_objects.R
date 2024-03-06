@@ -16,7 +16,7 @@ output$resid_plot_down<-downloadHandler(
     paste0("residual_plot", ".jpg")
   },
   content = function(file) {
-    ggsave(file, plot(mod()))
+    save(file, plot(mod()))
   })
 
 ## model prediction
@@ -96,7 +96,7 @@ output$conf.mat_down<- downloadHandler(
     paste("Confusion_Matrix", ".jpg", sep = "")
   },
   content = function(file) {
-    plot_confusion_matrix(conf.mat_fun(data=pred_df()))  }
+   save(file, plot_confusion_matrix(conf.mat_fun(data=pred_df())))  }
 )
 
 
@@ -125,8 +125,8 @@ output$roc.plot_down<- downloadHandler(
     paste("ROC_Curve", ".jpg", sep = "")
   },
   content = function(file) {
-    plot.roc(surveyroc()) 
-    text(0.2,0.2, paste0("AUC = ", signif(surveyroc()$auc, 3)))}
+    save(file, plot.roc(surveyroc())) 
+    }
 )
 
 

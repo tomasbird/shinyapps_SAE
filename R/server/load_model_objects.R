@@ -13,13 +13,18 @@ set.seed(1234)
   #       Check whether unnecessary census spatial variables have been excluded." )
   #)
 Aliastest <- reactive({
+  #shiny::validate(
+  ##  need(surveyDF(), "Survey Data not yet loaded.")
+  #)
   alias(formula(paste(input$indicator, "~" , 
                       paste0(input$model_params, collapse=" + "))), data=surveyDF())
 })
 
 # Alias report output
 Aliasout=reactive({
-  
+  #shiny::validate(
+  #  need(Aliasout(), "Please run Alias test")
+  #)
   aliased=Aliastest()
   al_all=data.frame(aliased$Complete)
   al=names(al_all)[which(al_all<0)]
@@ -38,10 +43,10 @@ output$Aliasreport <- renderPrint({
 ### Check Variance Inflation Factors
 ## VIF test on all variables
 VIFtest <- eventReactive(input$checkvif, {
-
-  #shiny::validate(
-  #  need(Aliasout()=="No aliasing detected", "Cannot run Variance Inflation Test with Aliased variables")
-  #)
+  shiny::validate(
+    need(Aliasout()=="No aliasing detected", "Cannot run Variance Inflation Test with Aliased variables")
+  )
+  
   fullform=formula(paste(input$indicator, "~" , 
                          paste0(input$model_params, collapse=" + ")))
  mod=glm(fullform, data=surveyDF(), family="binomial")
@@ -51,10 +56,10 @@ VIFtest <- eventReactive(input$checkvif, {
 ## download VIF test
 output$vif_down<-downloadHandler(
   filename = function() {
-    paste0("Variance inflation test", ".csv")
+    paste0("Variance_inflation_test", ".csv")
   },
   content = function(file) {
-    ggsave(file, VIFtest())
+    write.csv(file, VIFtest())
   })
 
 

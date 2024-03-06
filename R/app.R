@@ -86,7 +86,7 @@ ui <- fluidPage(theme='bootstrap.css',
                                         style="height:50px; width:170px;font-size:120%")),
                     column(4,
                            actionButton("download", "Offline Tool", icon("github", style='padding:4px; font-size:80%'), 
-                                        onclick ="window.open('https://https://github.com/tomasbird/shinyapps_SAE/', '_blank')", 
+                                        onclick ="window.open('https://github.com/tomasbird/shinyapps_SAE/', '_blank')", 
                                         style="height:50px; width:170px; font-size:120%"))
            ),
            fluidRow(align="center",
@@ -574,13 +574,7 @@ tabPanel("Instructions",
            sidebarPanel(
              h3("Model Setup"),
              conditionalPanel('input.modelbuild=="Parameter Tests"',
-                              h4("Aliasing"),
-                              p("Aliasing refers to when two variables are perfectly correlated. You must remove Aliased 
-                                variables before running the VIF test."),
-                             # actionButton("checkalias", "Check for Aliasing"),             
-                              hr(),
-                              br(),
-                              h4("Collinearity"),
+                              h4("Collinearity Test"),
                              
                               actionButton("checkvif", "Variance Inflation Factors"),
                               br()
@@ -592,11 +586,13 @@ tabPanel("Instructions",
                               br(),
                               actionButton("runstepwise", "Stepwise variable selection", icon=icon("shoe-prints")),             
                               
-                              uiOutput("regionfx")
+                              uiOutput("regionfx"),
+                              p("Note that models may take some time to run, especially when a random effect is included.")
+                              
              ),
-             
+             hr(),
              h4("Included Variables"),
-             p("Variables to include in the final model. Uncheck those that you would like to exclude"),
+             p("Variables to be included in the model should be checked below."),
              uiOutput("choose_model_params")
            ),
            
@@ -604,18 +600,15 @@ tabPanel("Instructions",
              tabsetPanel(id = 'modelbuild',
                          tabPanel("Parameter Tests", 
                                   p("Before building the model, check to make sure all the predictors 
-                                  are independent. 
-                                  The collinearity test calculates a Variance Inflation Factor (VIF) for each variable 
+                                  are independent. The Alias test checks to see whether any variables are identical 
+                                  to one another. The collinearity test calculates a Variance Inflation Factor (VIF) for each variable 
                                   that helps determine whether that variable is highly correlated with one of the other 
-                                  variables. However it cannot be calculated for perfectly correlated variables. You must 
-                                  therefore test for Aliasing first and confirm that no Aliasing is detected in the data."),
+                                  variables. You must remove all aliased variables before the collinearity test. "),
                                   hr(),
                                   h3("Alias Report"),
+                                  p("Confirm there is no Aliasing by removing any variables flagged in the report."),
                                   textOutput("Aliasreport"),
-                                  p("You must confirm there is no Aliasing by removing any variables flagged in the report 
-                                    and re-running the test."),
-                                 
-                                  
+                                
                                   hr(),
                                   h3("Variance Inflation Table"),
                                   p("The GVIF table shows  Generalized Variance Inflation Factor (GVIF) and degrees of freedom (df) 

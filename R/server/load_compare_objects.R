@@ -80,14 +80,11 @@ output$census_freq_plot <- renderPlot({
 })
 
 
-
-
 ######## compare distributions of individual variables
 ### Reactive UI to choose what survey variable to compare
 output$show_survey_vars <- renderUI({
   selectInput("show_survey_vars", "Choose variable to compare", input$Predictors)
 })
-
 
 
 ## Reactive function aggregating  data into survey areas for 'Distributions' comparison tab
