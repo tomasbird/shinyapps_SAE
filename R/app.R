@@ -710,7 +710,7 @@ tabPanel('Prediction',
                                 column(3, 
                                        fluidRow(h4("Census-level predictions")),
                                        fluidRow(br()),
-                                       fluidRow(downloadButton("predicted_census_down", "Download Census Predictions"))
+                                       fluidRow(downloadButton("predicted_census_map_down", "Download Census Predictions"))
                                 ),
                                 column(9, 
                                        plotOutput("predicted_census_map")%>% withSpinner(color="#0dc5c1")
@@ -719,7 +719,7 @@ tabPanel('Prediction',
                                 column(3, 
                                        fluidRow(h4("Survey-level predictions")),
                                        fluidRow(br()),
-                                       fluidRow(downloadButton("predicted_survey_down", "Download Survey Predictions"))),
+                                       fluidRow(downloadButton("predicted_survey_map_down", "Download Survey Predictions"))),
                                 column(9, 
                                        plotOutput("predicted_survey_map")%>% withSpinner(color="#0dc5c1")
                                   )),
@@ -727,7 +727,7 @@ tabPanel('Prediction',
                                 column(3, 
                                        fluidRow(h4("Direct Estimates")),
                                        fluidRow(br()),
-                                       fluidRow(downloadButton("direct_estimate_map_down", "Estimates"))
+                                       fluidRow(downloadButton("direct_plot_map_down", "Direct Estimates"))
                                        ),
                                 column(9, plotOutput("direct_plot")%>% withSpinner(color="#0dc5c1")
                                        ))

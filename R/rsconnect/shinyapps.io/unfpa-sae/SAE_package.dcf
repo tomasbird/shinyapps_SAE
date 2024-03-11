@@ -5,7 +5,7 @@ account: unfpa-sae
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10187801
-bundleId: 8335261
+bundleId:
 url: https://unfpa-sae.shinyapps.io/SAE_package/
 version: 1
 asMultiple: FALSE

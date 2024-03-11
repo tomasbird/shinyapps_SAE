@@ -127,7 +127,7 @@ output$direct_plot=renderPlot({
 })
 
 # Download mapped direct estimates at survey area
-output$direct_plot_down<-downloadHandler(
+output$direct_plot_map_down<-downloadHandler(
   filename = function() {
     paste0("Direct_Estimates", ".jpg")
   },
@@ -150,9 +150,13 @@ output$predicted_survey_table=DT::renderDataTable({
 })
 
 
+pred_census_table=reactive({
+  pred_output_table_fn(dat=census_predicted_at_census(), digits=4)
+})
+
 ## display table of predicted at census
 output$predicted_census_table=DT::renderDataTable({
-  pred_output_table_fn(dat=census_predicted_at_census(), digits=2)
+  pred_census_table()
 })
 
 
@@ -162,8 +166,10 @@ output$pred_survey_table_down<-downloadHandler(
     paste0("Tabular_predictions_at_survey_scale", ".csv")
   },
   content = function(file) {
-    write.csv(file,  pred_output_table_fn(dat=census_predicted_at_survey(), digits=4))
-  })
+    write.csv(census_predicted_at_survey(), file)
+  },
+  contentType = "text/csv"
+  )
 
 # download table predicted at census level
 output$pred_census_table_down<-downloadHandler(
@@ -171,5 +177,5 @@ output$pred_census_table_down<-downloadHandler(
     paste0("Tabular_predictions_at_census_scale", ".csv")
   },
   content = function(file) {
-    write.csv(file,  pred_output_table_fn(dat=census_predicted_at_census(), digits=4))
+    write.csv(census_predicted_at_census(), file)
   })

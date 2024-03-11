@@ -1,5 +1,10 @@
 #### Assessment of model
 
+## resid_plot function
+resid_plot_fn=function(model){
+  plot(model, which=1)
+}
+
 ## residual plot
 output$resid_plot <- renderPlot({
   shiny::validate(
@@ -7,17 +12,21 @@ output$resid_plot <- renderPlot({
     #need(input$usedemo | !is.null(input$census.file), "Census dataset not yet loaded"),
     need(mod(), "Model not yet generated.")
   )
-  plot(mod(), which=1)
+  resid_plot_fn(mod())
+ 
 })
 
 # download residual plot
-output$resid_plot_down<-downloadHandler(
+output$residplot_down<-downloadHandler(
   filename = function() {
     paste0("residual_plot", ".jpg")
   },
   content = function(file) {
-    save(file, plot(mod()))
-  })
+    jpeg(file) 
+      resid_plot_fn(mod())
+    dev.off()
+  }
+  )
 
 ## model prediction
 predicted <- reactive({
@@ -96,7 +105,7 @@ output$conf.mat_down<- downloadHandler(
     paste("Confusion_Matrix", ".jpg", sep = "")
   },
   content = function(file) {
-   save(file, plot_confusion_matrix(conf.mat_fun(data=pred_df())))  }
+   ggsave(file, plot_confusion_matrix(conf.mat_fun(data=pred_df())))  }
 )
 
 
@@ -125,7 +134,10 @@ output$roc.plot_down<- downloadHandler(
     paste("ROC_Curve", ".jpg", sep = "")
   },
   content = function(file) {
-    save(file, plot.roc(surveyroc())) 
+    jpeg(file) 
+       plot.roc(surveyroc())
+       text(0.2,0.2, paste0("AUC = ", round(surveyroc()$auc, 3)))
+    dev.off()
     }
 )
 

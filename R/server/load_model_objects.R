@@ -59,7 +59,7 @@ output$vif_down<-downloadHandler(
     paste0("Variance_inflation_test", ".csv")
   },
   content = function(file) {
-    write.csv(file, VIFtest())
+    write.csv(VIFtest(), file)
   })
 
 
