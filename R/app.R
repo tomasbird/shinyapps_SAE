@@ -491,7 +491,8 @@ tabPanel("Instructions",
                          
                     fluidRow(plotOutput("surveyMap") %>% withSpinner(color="#0dc5c1")),
                     fluidRow(DT::dataTableOutput("survey_preview") %>% withSpinner(color="#0dc5c1")),
-                    fluidRow(verbatimTextOutput("pathprint"))
+                    fluidRow(verbatimTextOutput("pathprint")),
+                    hr()
                     ),
                 
                 tabPanel("Census", 
@@ -500,7 +501,8 @@ tabPanel("Instructions",
                      # ),
                          
                     fluidRow(plotOutput("censusMap") %>% withSpinner(color="#0dc5c1")),
-                    fluidRow(DT::dataTableOutput("census_preview") %>% withSpinner(color="#0dc5c1"))
+                    fluidRow(DT::dataTableOutput("census_preview") %>% withSpinner(color="#0dc5c1")),
+                    hr()
                         )
                  )))), # end Select Data
 
@@ -531,7 +533,8 @@ tabPanel("Instructions",
                 fluidRow(plotOutput("VarsR2plot") %>% withSpinner(color="#0dc5c1")),
                 p(paste0("Figure 1: Correlation plot showing the strength of the relationship between the chosen indicators and each of the chosen predictor variables.")),  
                 
-                downloadButton("VarsR2plot_down", "Download comparisons")
+                downloadButton("VarsR2plot_down", "Download comparisons"),
+                hr()
                 ),
                      
           tabPanel("Distributions", 
@@ -552,7 +555,8 @@ tabPanel("Instructions",
                               fluidRow(
                                 column(6,downloadButton("compare_vars_barplot_down", "Download Barplot")),
                                 column(6,downloadButton("compare_vars_scatterplot_down", "Download Scatterplot"))
-                              )),
+                              ),
+                   hr()),
                      
                      tabPanel("Spatial",
                               fluidRow(
@@ -564,7 +568,8 @@ tabPanel("Instructions",
                                 as the number of surveys conducted in each DHS region divided by the total number of surveys."),
                               fluidRow(plotOutput("census_freq_plot")),
                               p("Figure 5: Spatial distribution of sampling effort during census. Frequency is calculated
-                                as the number of surveys conducted in each DHS region divided by the total number of surveys.")
+                                as the number of surveys conducted in each DHS region divided by the total number of surveys."),
+                              hr()
                      ))), # end Compare data
               
 
@@ -616,6 +621,7 @@ tabPanel("Instructions",
                                   fluidRow(DT::dataTableOutput("VIFtable")),
                                   br(),
                                   fluidRow(downloadButton("vif_down", "Download GVIF table")),
+                                  br(),
                                   hr()
                          ),
                          
@@ -634,6 +640,7 @@ tabPanel("Instructions",
                                     might be important to include in the model. The Deviance residuals help describe how much of 
                                     the variation in the data can be described by the model."),
                                   fluidRow(verbatimTextOutput("model_summary") %>% withSpinner(color="#0dc5c1")),
+                                  br(),
                                   hr()
                          ))))), # End Model Setup
 
@@ -655,7 +662,9 @@ tabPanel("Instructions",
                                 column(6,plotOutput("r2plot")%>% withSpinner(color="#0dc5c1"))),
                               fluidRow(
                                 column(6, downloadButton("residplot_down", "Download Residuals plot")),
-                                column(6, downloadButton("r2plot_down", "Download correlation plot")))
+                                column(6, downloadButton("r2plot_down", "Download correlation plot"))),
+                              br(),
+                              hr()
                      ),
                      
                      tabPanel("Validation", 
@@ -668,8 +677,10 @@ tabPanel("Instructions",
                            The top-left panel indicates the percentage of true positive observations the model predicted 
                            correctly, while the bottom-right shows true negatives.  The top-right and bottom left indicate 
                            false positive and false negatives.")), 
-                                column(6,p("The Receiver-Operating Curve shows the rate at which the model distinguishes true 
-                                    positives relative to the false positive rate. "))
+                                column(6,p(" The ROC curve and the related parameter the Area Under the Curve (AUC), measure 
+                                the overall predictive power of the model. If the AUC= 1, all positive cases are ranked before 
+                                negative cases; if AUC = 0.5, the model is not different from a random allocation. When the AUC >=.70,
+                                the model is considered acceptable"))
                               ),
                               fluidRow(
                                 column(6,plotOutput("conf.mat") %>% withSpinner(color="#0dc5c1")),
@@ -678,7 +689,9 @@ tabPanel("Instructions",
                               fluidRow(
                                 column(6, downloadButton("conf.mat_down", "Download Confusion Matrix")),
                                 column(6, downloadButton("roc.plot_down", "Download ROC curve"))
-                              )
+                              ),
+                              br(),
+                              hr()
                      ),
                      
                      tabPanel("Cross Validation", 
@@ -695,7 +708,9 @@ tabPanel("Instructions",
                               ),
                               conditionalPanel(condition="$('html').hasClass('shiny-busy')",
                                                tags$div("Running Cross Validation...",id="loadmessage")),
-                              DT::dataTableOutput("xval_table") %>% withSpinner(color="#0dc5c1")     
+                              DT::dataTableOutput("xval_table") %>% withSpinner(color="#0dc5c1"),
+                              br(),
+                              hr()
                      ))), # end model Assessment
 
 ## Tab for prediction ##
@@ -703,6 +718,10 @@ tabPanel('Prediction',
          tabsetPanel(id = 'pred',
                      tabPanel("Map output",
                               h3("Mapped predictions"),
+                              p("Mapped predictions are created by aggregating individual-level model estimates 
+                                and aggregating within census or survey areas. Direct estimates are also mapped 
+                                within the survey areas for comparison."),
+                              
                               conditionalPanel(condition="$('html').hasClass('shiny-busy')",
                                                tags$div("Loading prediction maps...",id="loadmessage")
                                                ),
@@ -730,7 +749,9 @@ tabPanel('Prediction',
                                        fluidRow(downloadButton("direct_plot_map_down", "Direct Estimates"))
                                        ),
                                 column(9, plotOutput("direct_plot")%>% withSpinner(color="#0dc5c1")
-                                       ))
+                                       )),
+                              br(),
+                              hr()
                               ),
          
          tabPanel("Table output", 
@@ -744,7 +765,9 @@ tabPanel('Prediction',
                   br(),
                   h4("Results within census regions"),
                   fluidRow(DT::dataTableOutput("predicted_census_table")%>% withSpinner(color="#0dc5c1")),
-                  downloadButton("pred_census_table_down", "Download census level predictions")
+                  downloadButton("pred_census_table_down", "Download census level predictions"),
+                  br(),
+                  hr()
          ))) # end Prediction
 
 
