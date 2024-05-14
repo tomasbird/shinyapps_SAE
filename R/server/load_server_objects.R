@@ -142,7 +142,8 @@ surveyShp <- reactive({
     need(input$usedemo | !is.null(input$survey.shp.file), "Please load survey shapefile")
   )
   
-  localfile="data/Nepal/Survey/shp/NPL_DHS_Regions.shp"
+  localdsn="data/Nepal/Survey/shp"
+  locallay="NPL_DHS_Regions"
   if(input$usedemo==FALSE) {
     if (!is.null(input$survey.shp.file)){
       shpDF <- input$survey.shp.file
@@ -152,25 +153,55 @@ surveyShp <- reactive({
       for (i in 1:nrow(shpDF)){
         file.rename(shpDF$datapath[i], shpDF$name[i])
       }
-      shpName <- shpDF$name[grep(x=shpDF$name, pattern="*.shp")]
-      if(length(shpName)>1) shpName=shpName[-(grep(".xml", shpName))]
-      shpPath <- paste(uploadDirectory, shpName, sep="/")
+      shpName <- tools::file_path_sans_ext(shpDF$name)
+      #if(length(shpName)>1) shpName=shpName[-(grep(".xml", shpName))]
+      #shpPath <- paste(uploadDirectory, shpName, sep="/")
       setwd(prevWD)
-      survey_shp <- try(readOGR(shpPath), silent=T)
+      survey_shp <- try(read_sf(dsn=uploadDirectory, lay=shpName), silent=T)
       return(survey_shp)
     } else {
       return()
     }
   } else {
-    survey_shp = try(readOGR(localfile), silent=T)
+    survey_shp = try(st_read(dsn=localdsn, lay=locallay), silent=T)
     return(survey_shp)}  
 })
+
+#surveyShp <- reactive({
+#  ## Validation
+#  shiny::validate(
+#    need(input$usedemo | !is.null(input$survey.shp.file), "Please load survey shapefile")
+#  )
+  
+#  localfile="data/Nepal/Survey/shp/NPL_DHS_Regions.shp"
+#  if(input$usedemo==FALSE) {
+#    if (!is.null(input$survey.shp.file)){
+#      shpDF <- input$survey.shp.file
+#      prevWD <- getwd()
+#      uploadDirectory <- dirname(shpDF$datapath[1])
+#      setwd(uploadDirectory)
+#      for (i in 1:nrow(shpDF)){
+#        file.rename(shpDF$datapath[i], shpDF$name[i])
+#      }
+#      shpName <- shpDF$name[grep(x=shpDF$name, pattern="*.shp")]
+#      if(length(shpName)>1) shpName=shpName[-(grep(".xml", shpName))]
+#      shpPath <- paste(uploadDirectory, shpName, sep="/")
+#      setwd(prevWD)
+#      survey_shp <- try(read_sf(shpPath), silent=T)
+#      return(survey_shp)
+#    } else {
+#      return()
+#    }
+#  } else {
+#    survey_shp = try(read_sf(localfile), silent=T)
+#    return(survey_shp)}  
+#})
 
 
 # map of survey areas
 output$surveyMap <- renderPlot({
   shiny::validate(
-    need(class(surveyShp())=="SpatialPolygonsDataFrame", "No survey shapefile detected. Did you load all associated files?")
+    need(class(surveyShp())=="sf", "No survey shapefile detected?")
   )
   
   #req(surveyShp())
