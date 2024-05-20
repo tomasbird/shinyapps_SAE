@@ -610,9 +610,10 @@ tabPanel("Instructions",
                                   that helps determine whether that variable is highly correlated with one of the other 
                                   variables. You must remove all aliased variables before the collinearity test. "),
                                   hr(),
-                                  h3("Alias Report"),
-                                  p("Confirm there is no Aliasing by removing any variables flagged in the report."),
-                                  textOutput("Aliasreport"),
+                                  h3("Alias Test"),
+                                  p(tags$b("Confirm there is no Aliasing by removing any variables flagged in the report.")),
+                                  
+                                  p(tags$b(textOutput("Aliasreport"))),
                                 
                                   hr(),
                                   h3("Variance Inflation Table"),

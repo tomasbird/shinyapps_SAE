@@ -28,15 +28,16 @@ Aliasout=reactive({
   aliased=Aliastest()
   al_all=data.frame(aliased$Complete)
   al=names(al_all)[which(al_all<0)]
-  if(length(al)>0) {print(paste("The variable(s) [", paste(al, collapse=", "), "] are perfectly correlated with other variables and should be removed."))
-  } else {print("No aliasing detected")}
+  if(length(al)>0) {(paste("The variable [", paste(al, collapse=", "), 
+                                "] is perfectly correlated with other variables and should be removed."))
+  } else {("No aliasing detected")}
 })
 
-output$Aliasreport <- renderPrint({
+output$Aliasreport <- renderText({
   shiny::validate(
     need(Aliasout(), "Please run Alias test")
      )
-  Aliasout()
+     Aliasout()
   })
 
 

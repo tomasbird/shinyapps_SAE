@@ -213,12 +213,46 @@ output$surveyMap <- renderPlot({
 })
 
 # census
+#censusShp <- reactive({
+#  shiny::validate(
+#    need(input$usedemo | !is.null(input$census.shp.file), "Please load census shapefile")
+#  )
+  
+#  localfile="data/Nepal/Census/shp/NPL_census_districts.shp"
+#  if(input$usedemo==FALSE) {
+#    if (!is.null(input$census.shp.file)){
+#      shpDF <- input$census.shp.file
+#      prevWD <- getwd()
+#      uploadDirectory <- dirname(shpDF$datapath[1])
+#      setwd(uploadDirectory)
+#      for (i in 1:nrow(shpDF)){
+#        file.rename(shpDF$datapath[i], shpDF$name[i])
+#      }
+#      shpName <- tools::file_path_sans_ext(shpDF$name)
+#      #if(length(shpName)>1) shpName=shpName[-(grep(".xml", shpName))]
+#      #shpPath <- paste(uploadDirectory, shpName, sep="/")
+#      setwd(prevWD)
+#     census_shp <- try(read_sf(dsn=shpDF, lay=shpName), silent=T)
+#      return(census_shp)
+#    } else {
+#      return()
+#    }
+#  } else {
+#    census_shp = try(read_sf(dsn=uploadDirectory, lay=shpName), silent=T)
+#    return(census_shp)}
+#  
+#})
+
+
+##### create reactive census shapefile
 censusShp <- reactive({
+  ## Validation
   shiny::validate(
     need(input$usedemo | !is.null(input$census.shp.file), "Please load census shapefile")
   )
   
-  localfile="data/Nepal/Census/shp/NPL_census_districts.shp"
+  localdsn="data/Nepal/Census/shp"
+  locallay="NPL_census_districts"
   if(input$usedemo==FALSE) {
     if (!is.null(input$census.shp.file)){
       shpDF <- input$census.shp.file
@@ -228,26 +262,25 @@ censusShp <- reactive({
       for (i in 1:nrow(shpDF)){
         file.rename(shpDF$datapath[i], shpDF$name[i])
       }
-      shpName <- shpDF$name[grep(x=shpDF$name, pattern="*.shp")]
-      if(length(shpName)>1) shpName=shpName[-(grep(".xml", shpName))]
-      shpPath <- paste(uploadDirectory, shpName, sep="/")
+      shpName <- tools::file_path_sans_ext(shpDF$name)
+      #if(length(shpName)>1) shpName=shpName[-(grep(".xml", shpName))]
+      #shpPath <- paste(uploadDirectory, shpName, sep="/")
       setwd(prevWD)
-      census_shp <- try(readOGR(shpPath), silent=T)
+      census_shp <- try(read_sf(dsn=uploadDirectory, lay=shpName), silent=T)
       return(census_shp)
     } else {
       return()
     }
   } else {
-    census_shp = try(readOGR(localfile), silent=T)
-    return(census_shp)}
-  
+    census_shp = try(st_read(dsn=localdsn, lay=locallay), silent=T)
+    return(census_shp)}  
 })
 
 
 ## map of census units
 output$censusMap <- renderPlot({
   shiny::validate(
-    need(class(censusShp())=="SpatialPolygonsDataFrame", "No census shapefile detected. Did you load all associated files?")
+    need(class(censusShp())=="sf", "No survey shapefile detected?")
   )
   
   req(censusShp())
