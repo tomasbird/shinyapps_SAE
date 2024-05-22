@@ -95,7 +95,9 @@ censusDF=reactive({
   shiny::validate(
     need(rawcensusDF(), "Please load census dataset", label="censusdfmissing"),
     need(input$survey_spatial, "Survey spatial variable not yet defined"),
-    need(input$survey_spatial %in% names(rawcensusDF()), "Survey spatial variable not found in census data. Please check your selection")
+    need(input$survey_spatial %in% names(rawcensusDF()), "Survey spatial variable not found in census data. Please check your selection"),
+    need(length(input$census.file$datapath)==1, "Too many census data files chosen. Please check your selection"),
+    need(file_ext(input$survey.file$datapath)=="csv", "Wrong file type loaded.  Check that the census data are in a .csv file")
     )
  
   subset(rawcensusDF(), select=c(input$Predictors, input$census_spatial, input$survey_spatial))
@@ -103,8 +105,10 @@ censusDF=reactive({
 
 surveyDF=reactive({
   shiny::validate(
-    need(rawsurveyDF(), "Please load survey dataset")
-   )
+    need(rawsurveyDF(), "Please load survey dataset"),
+    need(length(input$survey.file$datapath)==1, "Too many survey data files chosen. Please check your selection."),
+    need(file_ext(input$survey.file$datapath)=="csv", "Wrong file type loaded.  Check that the survey data are in a .csv file")
+  )
   rawsurveyDF()})
   
 ## Tabular output for viewing data
@@ -127,6 +131,7 @@ output$census_preview <- DT::renderDataTable({
   shiny::validate(
    need(input$survey_spatial %in% names(censusDF()), "Survey spatial variable not found in census data. Please check your selection"),
    need(censusDF(), "Please load census dataset", label="censusdfmissing")
+
    )
   dat=head(censusDF(), n=100)
   DT::datatable(dat, rownames=FALSE) #%>%
